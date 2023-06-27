@@ -8,7 +8,7 @@ class Board(db.Model):
 
     def response_dict(self):
         board_dict = {
-            "board_id": self.id,
+            "board_id": self.board_id,
             "title": self.title,
             "owner": self.owner
             }
