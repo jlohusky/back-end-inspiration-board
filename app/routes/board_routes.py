@@ -84,7 +84,7 @@ def get_cards_for_board(board_id):
                 "title": board.title,
                 "cards": card_list 
         }, 200)
-    
+
 @board_bp.route("/<board_id>/cards", methods=["POST"])
 def post_cards_for_board(board_id):
         board = Board.query.get(board_id)
