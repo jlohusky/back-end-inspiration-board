@@ -8,6 +8,7 @@ board_bp = Blueprint("board_bp", __name__, url_prefix="/board")
 '''
 Board CRUD Routes
 '''
+# I checked this post route - works!
 @board_bp.route("", methods=["POST"])
 def create_board():
     request_body = request.get_json()
@@ -21,6 +22,7 @@ def create_board():
 
     return make_response({"board": new_board.response_dict()}, 201)
 
+# I checked this get route - works!
 @board_bp.route("", methods=["GET"])
 def get_all_boards():
     boards = Board.query.all()
@@ -31,12 +33,13 @@ def get_all_boards():
             "title": board.title})
     return jsonify(board_response)
 
+# I checked this get route - works!
 @board_bp.route("/<board_id>", methods=["GET"])
 def get_one_board(board_id):    
     board = Board.query.get(board_id)
     if board is None:
         return make_response({"message" :f"Board {board_id} not found"}, 404)
-    return make_response({"board": {"id": board.id, "title": board.title}}, 200)
+    return make_response({"board": board.response_dict()}, 200)
 
 @board_bp.route("/<board_id>", methods=["PUT"])
 def update_board(board_id):
@@ -50,6 +53,7 @@ def update_board(board_id):
     db.session.commit()
     return make_response({"board": {"id": board.id, "title": board.title}}, 200)
 
+# I checked this delete route - works!
 @board_bp.route("/<board_id>", methods=["DELETE"])
 def delete_board(board_id):
     board = Board.query.get(board_id)
@@ -59,8 +63,9 @@ def delete_board(board_id):
     db.session.delete(board)
     db.session.commit()
 
-    return make_response({'details' : f'Board {board_id} "{board.title}" successfully deleted'})
+    return make_response({'details' : f"Board {board_id} {board.title} successfully deleted"})
 
+# I checked this get route - works - returned an empty array for cards!
 @board_bp.route("/<board_id>/cards", methods=["GET"])
 def get_cards_for_board(board_id):
     board = Board.query.get(board_id)
