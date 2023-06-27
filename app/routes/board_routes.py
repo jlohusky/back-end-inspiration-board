@@ -27,7 +27,7 @@ def get_all_boards():
     board_response = []
     for board in boards:
         board_response.append({
-            "id": board.id,
+            "board_id": board.id,
             "title": board.title})
     return jsonify(board_response)
 
@@ -75,7 +75,7 @@ def get_tasks_for_board(board_id):
 
     if request.method == "GET":
         return make_response({
-                "id": board.id,
+                "board_id": board.id,
                 "title": board.title,
                 "cards": card_list 
         }, 200)
