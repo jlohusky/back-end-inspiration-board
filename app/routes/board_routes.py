@@ -39,7 +39,7 @@ def get_one_board(board_id):
     return make_response({"board": {"id": board.id, "title": board.title}}, 200)
 
 @board_bp.route("/<board_id>", methods=["PUT"])
-def update_goal(board_id):
+def update_board(board_id):
     board = Board.query.get(board_id)
     if board is None:
         return make_response({'message': f'Board {board_id} not found'}, 404)
@@ -48,7 +48,7 @@ def update_goal(board_id):
     board.title = form_data["title"]
 
     db.session.commit()
-    return make_response({"goal": {"id": board.id, "title": board.title}}, 200)
+    return make_response({"board": {"id": board.id, "title": board.title}}, 200)
 
 @board_bp.route("/<board_id>", methods=["DELETE"])
 def delete_board(board_id):
@@ -59,7 +59,7 @@ def delete_board(board_id):
     db.session.delete(board)
     db.session.commit()
 
-    return make_response({'details' : f'Goal {board_id} "{board.title}" successfully deleted'})
+    return make_response({'details' : f'Board {board_id} "{board.title}" successfully deleted'})
 
 @board_bp.route("/<board_id>/cards", methods=["GET"])
 def get_cards_for_board(board_id):
@@ -85,7 +85,7 @@ def post_cards_for_board(board_id):
         board = Board.query.get(board_id)
     
         if board is None:
-            return make_response({'message': f'Goal {board_id} not found'}, 404)
+            return make_response({'message': f'Board {board_id} not found'}, 404)
         cards = Card.query.join(Board).filter(Card.board_id == board_id).all()
         card_list = []
         if cards:
@@ -93,7 +93,7 @@ def post_cards_for_board(board_id):
                 card_list.append(card.response_dict())
 
         form_data = request.get_json()
-        board.tasks = []
+        board.cards = []
 
         card_ids = form_data["card_ids"]
         for card_id in card_ids:
@@ -104,5 +104,5 @@ def post_cards_for_board(board_id):
 
         return make_response({
             "board_id": board.id, 
-            "task_ids": card_ids
+            "card_ids": card_ids
         }, 200)
