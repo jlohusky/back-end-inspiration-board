@@ -39,8 +39,9 @@ def get_one_board(board_id):
     board = Board.query.get(board_id)
     if board is None:
         return make_response({"message" :f"Board {board_id} not found"}, 404)
-    return make_response({"board": board.response_dict(), "card": board.cards}, 200)
+    return make_response({"board": board.response_dict(), "card": board.return_cards()}, 200)
 
+# tested - works!
 @board_bp.route("/<board_id>", methods=["PUT"])
 def update_board(board_id):
     board = Board.query.get(board_id)
@@ -51,7 +52,7 @@ def update_board(board_id):
     board.title = form_data["title"]
 
     db.session.commit()
-    return make_response({"board": {"id": board.id, "title": board.title}}, 200)
+    return make_response({"board": {"id": board.board_id, "title": board.title}}, 200)
 
 # I checked this delete route - works!
 @board_bp.route("/<board_id>", methods=["DELETE"])
@@ -85,6 +86,7 @@ def get_cards_for_board(board_id):
                 "cards": card_list 
         }, 200)
 
+# tested this - works!
 @board_bp.route("/<board_id>/cards", methods=["POST"])
 def post_cards_for_board(board_id):
         board = Board.query.get(board_id)

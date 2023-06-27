@@ -1,5 +1,4 @@
 from app import db
-from app.models.card import Card
 
 class Board(db.Model):
     board_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -7,7 +6,9 @@ class Board(db.Model):
     owner = db.Column(db.String)
     cards = db.relationship('Card', backref='board')
 
-    cards = [card for card in self if card_id == board.card_id]
+    def return_cards(self):
+        cards = [card for card in self.cards if self.board_id == card.board_id]
+        return cards
 
     def response_dict(self):
         board_dict = {
