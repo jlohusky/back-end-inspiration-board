@@ -95,8 +95,8 @@ def post_cards_for_board(board_id):
         form_data = request.get_json()
         board.cards = []
 
-        card_ids = form_data["card_ids"]
-        for card_id in card_ids:
+        card_id = form_data["card_id"]
+        for card_id in card_id:
             card = Card.query.get(card_id)
             Board.cards.append(card)
 
