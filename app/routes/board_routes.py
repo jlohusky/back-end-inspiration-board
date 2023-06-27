@@ -39,7 +39,7 @@ def get_one_board(board_id):
     board = Board.query.get(board_id)
     if board is None:
         return make_response({"message" :f"Board {board_id} not found"}, 404)
-    return make_response({"board": board.response_dict()}, 200)
+    return make_response({"board": board.response_dict(), "card": board.cards}, 200)
 
 @board_bp.route("/<board_id>", methods=["PUT"])
 def update_board(board_id):

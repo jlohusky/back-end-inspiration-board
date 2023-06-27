@@ -6,7 +6,7 @@ class Board(db.Model):
     owner = db.Column(db.String)
     cards = db.relationship('Card', backref='board')
 
-    cards = [card for card in board if ]
+    # cards = [card for card in board if ]
 
     def response_dict(self):
         board_dict = {
