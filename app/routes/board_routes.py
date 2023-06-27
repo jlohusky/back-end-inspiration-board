@@ -96,7 +96,7 @@ def post_cards_for_board(board_id):
         board.cards = []
 
         card_id = form_data["card_id"]
-        for card_id in card_id:
+        for cards in card_id:
             card = Card.query.get(card_id)
             Board.cards.append(card)
 
