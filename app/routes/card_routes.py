@@ -36,7 +36,7 @@ def update_card(card_id):
 
 
 @card_bp.route("/<card_id>", methods=["DELETE"])
-def delete_one_task(card_id):
+def delete_one_board(card_id):
     
     card_to_delete: Card = get_valid_card_by_id(Card, card_id)
 

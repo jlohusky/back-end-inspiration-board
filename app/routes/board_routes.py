@@ -14,12 +14,12 @@ def create_board():
     if "title" not in request_body:
         return make_response({"details": "Invalid data"}, 400)
     else:
-        new_board = Board(title = request_body["title"])
+        new_board = Board(title = request_body["title"], owner = request_body["owner"])
                     
     db.session.add(new_board)
     db.session.commit()
 
-    return make_response({"board": {"board_id": new_board.id, "title": new_board.title,}}, 201)
+    return make_response({"board": new_board.response_dict()}, 201)
 
 @board_bp.route("", methods=["GET"])
 def get_all_boards():
@@ -27,7 +27,7 @@ def get_all_boards():
     board_response = []
     for board in boards:
         board_response.append({
-            "board_id": board.id,
+            "board_id": board.board_id,
             "title": board.title})
     return jsonify(board_response)
 
@@ -75,7 +75,7 @@ def get_cards_for_board(board_id):
 
     if request.method == "GET":
         return make_response({
-                "board_id": board.id,
+                "board_id": board.board_id,
                 "title": board.title,
                 "cards": card_list 
         }, 200)
@@ -103,6 +103,8 @@ def post_cards_for_board(board_id):
         db.session.commit()
 
         return make_response({
-            "board_id": board.id, 
-            "card_ids": card_ids
+            "board_id": board.board_id, 
+            "card_id": card.card_id,
+            "message": card.message,
+            "likes_count": card.likes_count
         }, 200)
