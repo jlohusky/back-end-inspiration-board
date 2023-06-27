@@ -4,7 +4,9 @@ class Board(db.Model):
     board_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)
     owner = db.Column(db.String)
-    card = db.relationship('Card', backref='board')
+    cards = db.relationship('Card', backref='board')
+
+    cards = [card for card in board if ]
 
     def response_dict(self):
         board_dict = {
