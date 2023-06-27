@@ -24,15 +24,15 @@ def get_all_cards():
 
 
 @card_bp.route("/<card_id>/like", methods=["PUT"])
-def create_card(card_id):
+def update_card(card_id):
     
     # To be able to read the request we need to use the .getj_son() method
     card_is_valid: Card = get_valid_card_by_id(Card, card_id)
 
-    card_is_valid.like += 1
+    card_is_valid.likes_count += 1
     db.session.commit()
 
-    return {"task": card_is_valid.to_dict()}, 201
+    return {card_is_valid.to_dict()}, 200
 
 
 @card_bp.route("/<card_id>", methods=["DELETE"])
