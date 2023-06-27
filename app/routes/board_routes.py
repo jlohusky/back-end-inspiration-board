@@ -19,7 +19,7 @@ def create_board():
     db.session.add(new_goal)
     db.session.commit()
 
-    return make_response({"goal": {"id": new_goal.id, "title": new_goal.title,}}, 201)
+    return make_response({"goal": {"board_id": new_goal.id, "title": new_goal.title,}}, 201)
 
 @board_bp.route("", methods=["GET"])
 def get_all_boards():
@@ -103,6 +103,6 @@ def post_cards_for_board(board_id):
         db.session.commit()
 
         return make_response({
-            "id": board.id, 
+            "board_id": board.id, 
             "task_ids": card_ids
         }, 200)
