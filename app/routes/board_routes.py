@@ -14,12 +14,12 @@ def create_board():
     if "title" not in request_body:
         return make_response({"details": "Invalid data"}, 400)
     else:
-        new_goal = Board(title = request_body["title"])
+        new_board = Board(title = request_body["title"])
                     
-    db.session.add(new_goal)
+    db.session.add(new_board)
     db.session.commit()
 
-    return make_response({"goal": {"board_id": new_goal.id, "title": new_goal.title,}}, 201)
+    return make_response({"board": {"board_id": new_board.id, "title": new_board.title,}}, 201)
 
 @board_bp.route("", methods=["GET"])
 def get_all_boards():
