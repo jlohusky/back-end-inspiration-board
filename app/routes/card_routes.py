@@ -35,7 +35,7 @@ def update_card(card_id):
     return {card_is_valid.to_dict()}, 200
 
 @card_bp.route("/<card_id>/unlike", methods=["PUT"])
-def mark_task_as_incompleted(card_id):
+def mark_card_as_unliked(card_id):
 
     card_is_valid: Card = get_valid_card_by_id(Card, card_id)
 
