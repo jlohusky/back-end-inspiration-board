@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, make_response
 from app.models.card import Card 
 from app.models.board import Board
 from app import db
+import os
+import requests
 
 board_bp = Blueprint("board_bp", __name__, url_prefix="/board")
 
@@ -86,19 +88,36 @@ def get_cards_for_board(board_id):
                 "cards": card_list 
         }, 200)
 
+def slack_message_card(message):
+    url = 'https://slack.com/api/chat.postMessage'
+    headers = {
+        "Authorization": f"Bearer {os.environ.get('SLACK_TOKEN')}"
+    }
+    params = {
+        'channel': "majj-inspiration-board",
+        'text': message
+    }
+    print("sending message")
+    message = requests.post(url, data=params, headers=headers)
+    return message.json()
+
+
 # tested this - works!
 @board_bp.route("/<board_id>/cards", methods=["POST"])
 def create_card_for_board(board_id):
-        board = Board.query.get(board_id)
+    board = Board.query.get(board_id)
 
-        form_data = request.get_json()
-        card = Card(message=form_data["message"])
-        board.cards.append(card)
-        db.session.commit()
+    form_data = request.get_json()
+    card = Card(message=form_data["message"])
+    board.cards.append(card)
+    
+    slack_message_card(f"Congratulations! You've just posted a card! '{card.message}'!")
 
-        return make_response({
-            "board_id": board.board_id, 
-            "card_id": card.card_id,
-            "message": card.message,
-            "likes_count": card.likes_count
-        }, 200)
+    db.session.commit()
+
+    return make_response({
+        "board_id": board.board_id, 
+        "card_id": card.card_id,
+        "message": card.message,
+        "likes_count": card.likes_count
+    }, 200)

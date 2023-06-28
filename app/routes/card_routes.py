@@ -3,6 +3,7 @@ from app import db
 from app.models.card import Card
 import os
 
+
 def get_valid_card_by_id(model, id):
     try:
         id = int(id)
@@ -73,3 +74,5 @@ def delete_one_board(card_id):
     message_card = card_to_delete.message
 
     return {"details": f'Card {card_id} "{message_card}" successfully deleted'}, 200
+
+
