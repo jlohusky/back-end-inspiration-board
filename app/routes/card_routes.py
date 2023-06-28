@@ -34,6 +34,17 @@ def update_card(card_id):
 
     return {card_is_valid.to_dict()}, 200
 
+@card_bp.route("/<card_id>/unlike", methods=["PUT"])
+def mark_task_as_incompleted(card_id):
+
+    card_is_valid: Card = get_valid_card_by_id(Card, card_id)
+
+    card_is_valid.likes_count -= 1
+
+    db.session.commit()
+
+    return {"card": card_is_valid.to_dict()}, 200
+
 
 @card_bp.route("/<card_id>", methods=["DELETE"])
 def delete_one_board(card_id):
