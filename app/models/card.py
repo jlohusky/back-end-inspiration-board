@@ -7,6 +7,7 @@ class Card(db.Model):
     message = db.Column(db.String)
     likes_count = db.Column(db.Integer, default=0)
     board_id = db.Column(db.Integer, db.ForeignKey('board.board_id'), nullable=True)
+    
     def to_dict(self):
         return \
             {

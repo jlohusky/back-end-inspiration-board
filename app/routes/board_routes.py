@@ -88,7 +88,7 @@ def get_cards_for_board(board_id):
 
 # tested this - works!
 @board_bp.route("/<board_id>/cards", methods=["POST"])
-def post_cards_for_board(board_id):
+def create_card_for_board(board_id):
         board = Board.query.get(board_id)
 
         form_data = request.get_json()

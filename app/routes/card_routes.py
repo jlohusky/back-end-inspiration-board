@@ -9,6 +9,9 @@ def get_valid_card_by_id(model, id):
     except:
         abort(make_response({'details': 'Invalid data'}, 400))
 
+    card = model.query.get(id)
+    return card if card else abort(make_response({'message': f"Card {id} not found"}, 404))
+
 
 card_bp = Blueprint('cards', __name__, url_prefix="/cards")
 
@@ -23,8 +26,17 @@ def get_all_cards():
     return jsonify(cards_response), 200
 
 
+@card_bp.route("/<card_id>", methods=['GET'])
+def get_one_card(card_id):
+
+    # Get card by id
+    card: Card = get_valid_card_by_id(Card, card_id)
+
+    return jsonify(card.to_dict()), 200
+
+
 @card_bp.route("/<card_id>/like", methods=["PUT"])
-def update_card(card_id):
+def like_card(card_id):
     
     # To be able to read the request we need to use the .getj_son() method
     card_is_valid: Card = get_valid_card_by_id(Card, card_id)
@@ -32,7 +44,11 @@ def update_card(card_id):
     card_is_valid.likes_count += 1
     db.session.commit()
 
-    return {card_is_valid.to_dict()}, 200
+    print("card", card_is_valid)
+    print("with to_dict", card_is_valid.to_dict())
+
+    return jsonify(card_is_valid.to_dict()), 200
+
 
 @card_bp.route("/<card_id>/unlike", methods=["PUT"])
 def mark_card_as_unliked(card_id):
@@ -43,7 +59,7 @@ def mark_card_as_unliked(card_id):
 
     db.session.commit()
 
-    return {"card": card_is_valid.to_dict()}, 200
+    return jsonify(card_is_valid.to_dict()), 200
 
 
 @card_bp.route("/<card_id>", methods=["DELETE"])
