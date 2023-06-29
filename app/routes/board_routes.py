@@ -79,7 +79,7 @@ def get_cards_for_board(board_id):
     card_list = []
     if cards:
         for card in cards:
-            card_list.append(card.response_dict())
+            card_list.append(card.to_dict())
 
     if request.method == "GET":
         return make_response({

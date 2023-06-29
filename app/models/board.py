@@ -7,7 +7,7 @@ class Board(db.Model):
     cards = db.relationship('Card', backref='board')
 
     def return_cards(self):
-        cards = [card for card in self.cards if self.board_id == card.board_id]
+        cards = [card.to_dict() for card in self.cards if self.board_id == card.board_id]
         return cards
 
     def response_dict(self):
