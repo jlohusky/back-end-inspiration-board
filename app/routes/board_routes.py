@@ -74,7 +74,7 @@ def get_cards_for_board(board_id):
     board = Board.query.get(board_id)
     
     if board is None:
-        return make_response({'message': f'Goal {board_id} not found'}, 404)
+        return make_response({'message': f'Board {board_id} not found'}, 404)
     cards = Card.query.join(Board).filter(Card.board_id == board_id).all()
     card_list = []
     if cards:
