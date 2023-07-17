@@ -15,7 +15,7 @@ Board CRUD Routes
 def create_board():
     request_body = request.get_json()
     if "title" not in request_body:
-        return make_response({"details": "Invalid data"}, 400)
+        return make_response({"details": "No title in request body"}, 400)
     else:
         new_board = Board(title = request_body["title"], owner = request_body["owner"])
                     
@@ -109,9 +109,11 @@ def create_card_for_board(board_id):
 
     form_data = request.get_json()
     card = Card(message=form_data["message"])
-    board.cards.append(card)
-    
-    slack_message_card(f"Congratulations! You've just posted a card! '{card.message}'!")
+    if card not in form_data:
+        return make_response({"details": "No message in request body"}, 400)
+    else:
+        board.cards.append(card)
+        slack_message_card(f"Congratulations! You've just posted a card! '{card.message}'!")
 
     db.session.commit()
 
