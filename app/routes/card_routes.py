@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 from app.models.card import Card
 import os
+from sqlalchemy.sql import func
 
 
 def get_valid_card_by_id(model, id):
@@ -16,10 +17,21 @@ def get_valid_card_by_id(model, id):
 
 card_bp = Blueprint('cards', __name__, url_prefix="/cards")
 
+# @card_bp.route('', methods=['GET'])
+# def get_all_cards():
+#     # Get all Cards
+#     cards = Card.query.all()
+
+#     cards_response = []
+#     for card in cards:
+#         cards_response.append(card.to_dict())
+#     return jsonify(cards_response), 200
+
+
 @card_bp.route('', methods=['GET'])
 def get_all_cards():
-    # Get all Cards
-    cards = Card.query.all()
+    # Get all sorted cards
+    cards = Card.query.order_by(Card.likes_count.desc())
 
     cards_response = []
     for card in cards:
@@ -39,7 +51,7 @@ def get_one_card(card_id):
 @card_bp.route("/<card_id>/like", methods=["PUT"])
 def like_card(card_id):
     
-    # To be able to read the request we need to use the .getj_son() method
+    # To be able to read the request we need to use the .get_json() method
     card_is_valid: Card = get_valid_card_by_id(Card, card_id)
 
     card_is_valid.likes_count += 1

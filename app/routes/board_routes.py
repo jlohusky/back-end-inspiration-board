@@ -76,6 +76,7 @@ def get_cards_for_board(board_id):
     if board is None:
         return make_response({'message': f'Board {board_id} not found'}, 404)
     cards = Card.query.join(Board).filter(Card.board_id == board_id).all()
+    cards = Card.query.order_by(Card.likes_count.desc())
     card_list = []
     if cards:
         for card in cards:
@@ -109,7 +110,7 @@ def create_card_for_board(board_id):
 
     form_data = request.get_json()
     card = Card(message=form_data["message"])
-    if card not in form_data:
+    if not form_data["message"]:
         return make_response({"details": "No message in request body"}, 400)
     else:
         board.cards.append(card)
