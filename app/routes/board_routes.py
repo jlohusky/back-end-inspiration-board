@@ -4,6 +4,7 @@ from app.models.board import Board
 from app import db
 import os
 import requests
+from sqlalchemy import desc
 
 board_bp = Blueprint("board_bp", __name__, url_prefix="/board")
 
@@ -75,8 +76,15 @@ def get_cards_for_board(board_id):
     
     if board is None:
         return make_response({'message': f'Board {board_id} not found'}, 404)
-    cards = Card.query.join(Board).filter(Card.board_id == board_id).all()
-    cards = Card.query.order_by(Card.likes_count.desc())
+    
+    cards = (
+        Card.query
+        .join(Board)
+        .filter(Card.board_id == board_id)
+        .order_by(desc(Card.likes_count)) 
+        .all()
+    )
+    
     card_list = []
     if cards:
         for card in cards:
