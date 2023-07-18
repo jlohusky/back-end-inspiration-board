@@ -68,8 +68,11 @@ def mark_card_as_unliked(card_id):
 
     card_is_valid: Card = get_valid_card_by_id(Card, card_id)
 
-    card_is_valid.likes_count -= 1
-
+    if card_is_valid.likes_count > 0:
+        card_is_valid.likes_count -= 1
+    else:
+        card_is_valid.likes_count = 0
+    
     db.session.commit()
 
     return jsonify(card_is_valid.to_dict()), 200
